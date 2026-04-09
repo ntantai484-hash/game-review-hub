@@ -6,9 +6,10 @@ const mongoose = require('mongoose');
  * - Throws on failure so caller can decide to exit.
  */
 const connectDB = async () => {
-  const uri = process.env.MONGODB_URI;
+  // Accept either MONGODB_URI (preferred) or MONGO_URI (legacy)
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
   if (!uri) {
-    throw new Error('MONGODB_URI environment variable is not set');
+    throw new Error('MONGODB_URI (or MONGO_URI) environment variable is not set');
   }
 
   // Mask password for logs if present
