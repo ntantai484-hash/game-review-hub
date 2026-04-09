@@ -10,4 +10,4 @@ if (configured) {
   });
 }
 
-module.exports = cloudinary;
+module.exports = { cloudinary, configured };
