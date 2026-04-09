@@ -49,7 +49,10 @@ exports.register = async (req, res) => {
     };
 
     req.flash('success', 'Registration successful');
-    res.redirect('/');
+    req.session.save(err => {
+      if (err) console.error('Session save error:', err);
+      res.redirect('/');
+    });
 
   } catch (err) {
     console.error('Register error:', err);
@@ -97,7 +100,10 @@ exports.login = async (req, res) => {
     };
 
     req.flash('success', 'Logged in');
-    res.redirect('/');
+    req.session.save(err => {
+      if (err) console.error('Session save error:', err);
+      res.redirect('/');
+    });
 
   } catch (err) {
     console.error('Login error:', err);
