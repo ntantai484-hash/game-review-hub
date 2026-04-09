@@ -27,13 +27,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+// ── Trust reverse proxy (Vercel, Render, Heroku…) so secure cookies work ─────
+app.set('trust proxy', 1);
+
 // ── Session (MongoStore manages its own connection via mongoUrl) ──────────────
 app.use(session({
   secret: process.env.SESSION_SECRET || 'devsecret',
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI || process.env.MONGO_URI }),
-  cookie: { maxAge: 1000 * 60 * 60 * 24, secure: process.env.NODE_ENV === 'production' }
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    httpOnly: true
+  }
 }));
 app.use(flash());
 
