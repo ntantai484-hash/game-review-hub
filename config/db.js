@@ -1,37 +1,28 @@
 const mongoose = require('mongoose');
 
+/**
+ * Connect to MongoDB using MONGODB_URI env var.
+ * - Uses Mongoose v6+ defaults (no deprecated options).
+ * - Throws on failure so caller can decide to exit.
+ */
 const connectDB = async () => {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error('MONGODB_URI environment variable is not set');
+  }
+
+  // Mask password for logs if present
+  const safeUri = uri.replace(/(mongodb(?:\+srv)?:\/\/)([^:]+):([^@]+)@/, (m, p, u, pw) => `${p}${u}:*****@`);
+  console.log('Connecting to MongoDB:', safeUri);
+
   try {
-    const uri = process.env.MONGO_URI || process.env.DATABASE_URL || 'mongodb://127.0.0.1:27017/gamehub';
-    // show which URI is used (mask password if present)
-    const safeUri = uri.replace(/(mongodb(?:\+srv)?:\/\/)([^:]+):([^@]+)@/, (m, p, u, pw) => `${p}${u}:*****@`);
-    console.log('Connecting to MongoDB:', safeUri);
-
-    const opts = {
-      // recommended options — mongoose 6+ has sensible defaults, but keep explicit here
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      serverSelectionTimeoutMS: 10000
-    };
-
-    await mongoose.connect(uri, opts);
+    // Mongoose v6+ uses sensible defaults; include a serverSelectionTimeoutMS for faster failure.
+    await mongoose.connect(uri, { serverSelectionTimeoutMS: 10000 });
     console.log('MongoDB connected');
   } catch (err) {
     console.error('MongoDB connection error:', err && err.message ? err.message : err);
-    // If an env MONGO_URI / DATABASE_URL was provided and connection failed, try falling back to local MongoDB for development
-    const envUri = process.env.MONGO_URI || process.env.DATABASE_URL;
-    const localUri = 'mongodb://127.0.0.1:27017/gamehub';
-    if (envUri && envUri !== localUri) {
-      console.log('Attempting fallback to local MongoDB at', localUri);
-      try {
-        await mongoose.connect(localUri, { useNewUrlParser: true, useUnifiedTopology: true });
-        console.log('Fallback MongoDB connected (local)');
-        return;
-      } catch (localErr) {
-        console.error('Local MongoDB fallback failed:', localErr && localErr.message ? localErr.message : localErr);
-      }
-    }
-    console.error('Continuing without DB connection — the app will run but data-driven pages may be empty.');
+    // Rethrow so caller (deploy script) can exit the process.
+    throw err;
   }
 };
 

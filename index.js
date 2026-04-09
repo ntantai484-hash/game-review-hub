@@ -1,2 +1,4 @@
-// Minimal entry for Render: start the existing app (initApp runs on require)
-require('./app');
+// Entry point for Render: start the application.
+const { startApp } = require('./app');
+
+startApp();

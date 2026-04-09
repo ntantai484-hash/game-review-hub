@@ -2,7 +2,7 @@
   "name": "game",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
@@ -28,6 +28,9 @@
     "mongoose": "^9.4.1",
     "multer": "^2.1.1",
     "multer-storage-cloudinary": "^4.0.0"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "devDependencies": {
     "jest": "^29.0.0",
