@@ -27,8 +27,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Health-check / root route (safe before DB connection)
-app.get('/', (req, res) => res.send('OK — game-review-hub is running'));
+// Provide safe default template locals so views can render even before
+// sessions and flash are configured (avoids ReferenceError in EJS).
+app.use((req, res, next) => {
+  res.locals.currentUser = null;
+  res.locals.success = [];
+  res.locals.error = [];
+  res.locals.currentPath = req.path;
+  res.locals.messages = { success: null, error: null };
+  next();
+});
 
 /**
  * Start the application: connect to DB, configure session store, mount routes, start HTTP server.
