@@ -97,4 +97,5 @@ const startApp = async () => {
   }
 };
 
-module.exports = { app, startApp };
+app.startApp = startApp;
+module.exports = app;
