@@ -1,4 +1,4 @@
-// Entrypoint for Render — start the app via startApp exported from app.js
-const { startApp } = require('./app');
+const app = require('./app');
 
-startApp();
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
