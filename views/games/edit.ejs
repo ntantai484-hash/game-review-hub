@@ -1,0 +1,50 @@
+<%- include('../partials/admin_wrapper_start') %>
+<h2>Edit Game</h2>
+<form action="/admin/games/<%= game._id %>?_method=PUT" method="post" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label class="form-label">Name</label>
+    <input name="name" class="form-control" value="<%= game.name %>" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Genres (hold Ctrl / Cmd to select multiple)</label>
+    <select name="genres" class="form-select" multiple size="6" required>
+      <% (genres || []).forEach(g => { %>
+        <option value="<%= g._id %>" <%= (game.genres && game.genres.find(gg => gg._id ? gg._id.toString() === g._id.toString() : gg.toString() === g._id.toString())) ? 'selected' : '' %>><%= g.name %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Global Source Note</label>
+    <input name="globalSourceNote" class="form-control" value="<%= game.globalSourceNote || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Publisher</label>
+    <input name="publisher" class="form-control" value="<%= game.publisher || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Release Date</label>
+    <input name="releaseDate" type="date" class="form-control" value="<%= game.releaseDate ? game.releaseDate.toISOString().slice(0,10) : '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Price</label>
+    <input name="price" class="form-control" value="<%= game.price || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Sold</label>
+    <input name="sold" class="form-control" value="<%= game.sold || '' %>">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Image (leave blank to keep current)</label>
+    <input name="image" type="file" class="form-control">
+    <% if (game.image) { %>
+      <% const gameImageSrc = (typeof game.image === 'string' && game.image.startsWith('http')) ? game.image : ('/uploads/' + game.image); %>
+      <img src="<%= gameImageSrc %>" style="height:80px;margin-top:8px;" onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'160\' height=\'80\'><rect width=\'100%\' height=\'100%\' fill=\'%23eeeeee\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23999\' font-family=\'Arial\' font-size=\'12\'>No+image</text></svg>'" />
+    <% } %>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Content / Review</label>
+    <textarea name="content" class="form-control" rows="6"><%= game.content || '' %></textarea>
+  </div>
+  <button class="btn btn-primary">Update</button>
+</form>
+<%- include('../partials/admin_wrapper_end') %>

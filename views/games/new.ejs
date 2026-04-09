@@ -1,0 +1,46 @@
+<%- include('../partials/admin_wrapper_start') %>
+<h2>Add New Game</h2>
+<form action="/admin/games" method="post" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label class="form-label">Name</label>
+    <input name="name" class="form-control" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Genres (hold Ctrl / Cmd to select multiple)</label>
+    <select name="genres" class="form-select" multiple size="6" required>
+      <% (genres || []).forEach(g => { %>
+        <option value="<%= g._id %>"><%= g.name %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Global Source Note</label>
+    <input name="globalSourceNote" class="form-control" placeholder="e.g. Aggregated from Steam, Metacritic">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Publisher</label>
+    <input name="publisher" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Release Date</label>
+    <input name="releaseDate" type="date" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Price</label>
+    <input name="price" class="form-control" placeholder="e.g. 220.000 VNĐ">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Sold (eg. Hơn 4.2 triệu)</label>
+    <input name="sold" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Image</label>
+    <input name="image" type="file" class="form-control">
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Content / Review</label>
+    <textarea name="content" class="form-control" rows="6"></textarea>
+  </div>
+  <button class="btn btn-success">Create</button>
+</form>
+<%- include('../partials/admin_wrapper_end') %>

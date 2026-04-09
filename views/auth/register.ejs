@@ -1,0 +1,155 @@
+<%- include('../partials/header') %>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height:80vh;">
+  <div class="col-md-5">
+
+    <div class="card shadow-lg border-0">
+      <div class="card-body p-4">
+
+        <h3 class="text-center mb-4 fw-bold">Create Account 🚀</h3>
+
+        <% if (messages && messages.error) { %>
+          <div class="alert alert-danger"><%= messages.error %></div>
+        <% } %>
+
+        <form action="/auth/register" method="post" onsubmit="return validateForm()">
+
+          <!-- USERNAME -->
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input name="username" class="form-control"
+              placeholder="Choose a username" required>
+          </div>
+
+          <!-- PASSWORD -->
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+
+            <div class="input-group">
+              <input 
+                id="password"
+                name="password" 
+                type="password" 
+                class="form-control"
+                placeholder="Create a strong password"
+                onkeyup="validateAll()"
+                required>
+
+              <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('password')">
+                👁️
+              </button>
+            </div>
+
+            <!-- RULES -->
+            <ul class="mt-2 small" id="rules">
+              <li id="rule-length" class="text-danger">At least 6 characters</li>
+              <li id="rule-upper" class="text-danger">Contains uppercase letter</li>
+              <li id="rule-number" class="text-danger">Contains number</li>
+              <li id="rule-special" class="text-danger">Contains special character</li>
+            </ul>
+          </div>
+
+          <!-- CONFIRM PASSWORD -->
+          <div class="mb-3">
+            <label class="form-label">Confirm Password</label>
+
+            <div class="input-group">
+              <input 
+                id="confirmPassword"
+                type="password" 
+                class="form-control"
+                placeholder="Re-enter password"
+                onkeyup="validateAll()"
+                required>
+
+              <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('confirmPassword')">
+                👁️
+              </button>
+            </div>
+
+            <small id="matchText"></small>
+          </div>
+
+          <!-- BUTTON -->
+          <button id="submitBtn" class="btn btn-primary w-100 mb-3" disabled>
+            Register
+          </button>
+
+        </form>
+
+        <div class="text-center">
+          <small class="text-muted">
+            Already have an account?
+            <a href="/auth/login" class="fw-bold text-decoration-none">
+              Login here
+            </a>
+          </small>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function togglePassword(id) {
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
+}
+
+function validateAll() {
+  const password = document.getElementById("password").value;
+  const confirm = document.getElementById("confirmPassword").value;
+
+  let valid = true;
+
+  // RULES
+  const rules = {
+    length: password.length >= 6,
+    upper: /[A-Z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[^A-Za-z0-9]/.test(password)
+  };
+
+  // Update UI rules
+  for (let key in rules) {
+    const el = document.getElementById("rule-" + key);
+    if (rules[key]) {
+      el.classList.remove("text-danger");
+      el.classList.add("text-success");
+    } else {
+      el.classList.remove("text-success");
+      el.classList.add("text-danger");
+      valid = false;
+    }
+  }
+
+  // CHECK MATCH
+  const matchText = document.getElementById("matchText");
+  if (confirm.length > 0) {
+    if (password === confirm) {
+      matchText.innerHTML = "Passwords match ✅";
+      matchText.className = "text-success";
+    } else {
+      matchText.innerHTML = "Passwords do not match ❌";
+      matchText.className = "text-danger";
+      valid = false;
+    }
+  }
+
+  // ENABLE BUTTON
+  document.getElementById("submitBtn").disabled = !valid;
+}
+
+function validateForm() {
+  const btn = document.getElementById("submitBtn");
+  if (btn.disabled) {
+    alert("Please fix the form before submitting!");
+    return false;
+  }
+  return true;
+}
+</script>
+
+<%- include('../partials/footer') %>

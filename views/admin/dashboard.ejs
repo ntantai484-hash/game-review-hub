@@ -1,0 +1,33 @@
+<%- include('../partials/admin_wrapper_start') %>
+  <div class="admin-header">
+    <h2 style="margin:0;">Admin Dashboard</h2>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3 mb-3">
+      <div class="card p-3">
+        <h5>Total Games</h5>
+        <div class="h2"><%= totalGames %></div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card p-3">
+        <h5>Total Genres</h5>
+        <div class="h2"><%= totalGenres %></div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card p-3">
+        <h5>Total Comments</h5>
+        <div class="h2"><%= totalComments %></div>
+      </div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <div class="card p-3">
+        <h5>Total Users</h5>
+        <div class="h2"><%= totalUsers %></div>
+      </div>
+    </div>
+  </div>
+
+<%- include('../partials/admin_wrapper_end') %>

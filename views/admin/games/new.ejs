@@ -1,0 +1,71 @@
+<%- include('../../partials/admin_wrapper_start') %>
+
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">New Game</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/admin/games">Games</a></li>
+            <li class="breadcrumb-item active">New</li>
+        </ol>
+
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <form action="/admin/games" method="post" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input name="name" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Genres</label>
+
+                        <div class="border rounded p-3" style="max-height:200px; overflow-y:auto;">
+                            <% genres.forEach(g => { %>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="genres" value="<%= g._id %>">
+                                    <label class="form-check-label">
+                                        <%= g.name %>
+                                    </label>
+                                </div>
+                            <% }) %>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Publisher</label>
+                            <input name="publisher" class="form-control" placeholder="e.g. ConcernedApe">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Release Date</label>
+                            <input type="date" name="releaseDate" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Price</label>
+                            <input name="price" class="form-control" placeholder="e.g. Free / $19.99">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Sold</label>
+                            <input name="sold" class="form-control" placeholder="e.g. 1,000,000">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Content</label>
+                        <textarea name="content" class="form-control" rows="6"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Image</label>
+                        <input type="file" name="image" class="form-control">
+                    </div>
+
+                    <div class="d-grid">
+                        <button class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../../partials/admin_wrapper_end') %>

@@ -1,0 +1,86 @@
+<%- include('partials/header') %>
+  <div class="row">
+    <div class="col-12 mb-4">
+      <form class="row g-2" method="get" action="/">
+        <div class="col-md-4">
+          <input name="q" value="<%= q || '' %>" class="form-control" placeholder="Search games...">
+        </div>
+
+        <div class="col-md-3">
+          <select name="genres" class="form-select">
+            <option value="">All genres</option>
+            <% (genres || []).forEach(g=> { %>
+              <option value="<%= g._id %>" <%=(genresSelected && genresSelected[0]===g._id.toString()) ? 'selected' : ''
+                %>>
+                <%= g.name %>
+              </option>
+              <% }) %>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select name="sort" class="form-select">
+            <option value="">Sort</option>
+            <option value="top" <%=sort==='top' ? 'selected' : '' %>>Top rated</option>
+            <option value="new" <%=sort==='new' ? 'selected' : '' %>>Newest</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-primary w-100">Filter</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-12 mb-3">
+    </div>
+    <% games.forEach(game=> { %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="image-wrap">
+            <% if (game.image) { %>
+              <% const gameImageSrc = (typeof game.image === 'string' && game.image.startsWith('http')) ? game.image : ('/uploads/' + game.image); %>
+              <img src="<%= gameImageSrc %>" class="card-img-top" style="height:200px;object-fit:cover;"
+                onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'200\'><rect width=\'100%\' height=\'100%\' fill=\'%23eeeeee\'/><text x=\'50%\' y=\'50%\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23999\' font-family=\'Arial\' font-size=\'20\'>No+image</text></svg>'" />
+            <% } %>
+                <% const displayRating=(typeof game.globalRating !== 'undefined' && game.globalRating !== null) ? game.globalRating : game.rating; const ratingClass = displayRating > 8 ? 'rating-high' : (displayRating >= 5 ? 'rating-mid' : 'rating-low'); %>
+                  <div class="rating-badge small <%= ratingClass %>">
+                    <span class="icon">★</span>
+                    <span class="value">
+                      <%= (typeof displayRating !=='undefined' ? displayRating : 'N/A' ) %>
+                    </span>
+                  </div>
+          </div>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title"><a href="/games/<%= game._id %>">
+                <%= game.name %>
+              </a></h5>
+            <p class="mb-1"><strong>Genres:</strong>
+              <% if (game.genres && game.genres.length) { %>
+                <%= game.genres.map(g=> g.name).join(', ') %>
+                  <% } else { %> N/A <% } %>
+            </p>
+            <p class="mb-2"><strong>Rating:</strong>
+              <%= (typeof game.rating !=='undefined' ? game.rating : 'N/A' ) %> / 10 <% if (game.userRatingCount) { %> (
+                  <%= game.userRatingCount %>) <% } %>
+            </p>
+            <a href="/games/<%= game._id %>" class="btn btn-primary mt-auto">Read Review</a>
+          </div>
+        </div>
+      </div>
+      <% }) %>
+  </div>
+  <% if (typeof totalPages !=='undefined' && totalPages> 1) { %>
+    <nav aria-label="Page navigation" class="mt-4">
+      <ul class="pagination">
+        <% for (let p=1; p <=totalPages; p++) { %>
+          <li class="page-item <%= (p===page) ? 'active' : '' %>">
+            <% let qs='?page=' +p; if (q) qs +='&q=' +encodeURIComponent(q); if (sort) qs +='&sort='
+              +encodeURIComponent(sort); if (genresSelected && genresSelected.length) { genresSelected.forEach(gid=> {
+              qs += '&genres='+encodeURIComponent(gid); }); } %>
+              <a class="page-link" href="/<%= qs %>">
+                <%= p %>
+              </a>
+          </li>
+          <% } %>
+      </ul>
+    </nav>
+    <% } %>
+      <%- include('partials/footer') %>

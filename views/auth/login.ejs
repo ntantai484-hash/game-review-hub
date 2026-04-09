@@ -1,0 +1,70 @@
+<%- include('../partials/header') %>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height:80vh;">
+  <div class="col-md-5">
+
+    <div class="card shadow-lg border-0">
+      <div class="card-body p-4">
+
+        <!-- TITLE -->
+        <h3 class="text-center mb-4 fw-bold">Welcome Back 👋</h3>
+
+        <!-- ERROR MESSAGE -->
+        <% if (messages && messages.error) { %>
+          <div class="alert alert-danger">
+            <%= messages.error %>
+          </div>
+        <% } %>
+
+        <!-- SUCCESS MESSAGE -->
+        <% if (messages && messages.success) { %>
+          <div class="alert alert-success">
+            <%= messages.success %>
+          </div>
+        <% } %>
+
+        <!-- FORM -->
+        <form action="/auth/login" method="post">
+
+          <div class="mb-3">
+            <label class="form-label">Username</label>
+            <input 
+              name="username" 
+              class="form-control" 
+              placeholder="Enter your username"
+              required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input 
+              name="password" 
+              type="password" 
+              class="form-control" 
+              placeholder="Enter your password"
+              required>
+          </div>
+
+          <button class="btn btn-primary w-100 mb-3">
+            Login
+          </button>
+
+        </form>
+
+        <!-- REGISTER LINK -->
+        <div class="text-center">
+          <small class="text-muted">
+            Don't have an account?
+            <a href="/auth/register" class="fw-bold text-decoration-none">
+              Register here
+            </a>
+          </small>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

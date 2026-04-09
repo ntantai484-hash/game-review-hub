@@ -1,0 +1,80 @@
+<%- include('../../partials/admin_wrapper_start') %>
+
+<div class="container-fluid px-4">
+  <h1 class="mt-4">Genres Management</h1>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Manage Genres</li>
+  </ol>
+
+  <!-- Add Genre -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header">
+      <i class="fas fa-plus me-2"></i>Add New Genre
+    </div>
+    <div class="card-body">
+      <form action="/admin/genres" method="post" class="row g-2">
+        <div class="col-md-10">
+          <input name="name" class="form-control" placeholder="Enter genre name..." required>
+        </div>
+        <div class="col-md-2 d-grid">
+          <button class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Genres Table -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span><i class="fas fa-tags me-2"></i>Genres List</span>
+      <span class="badge bg-secondary"><%= genres.length %> items</span>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-dark">
+            <tr class="text-center">
+              <th>Name</th>
+              <th style="width: 150px">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% genres.forEach(g => { %>
+              <tr>
+                <td>
+                  <span class="fw-semibold">
+                    <%= g.name %>
+                  </span>
+                </td>
+
+                <td class="text-center">
+                  <form action="/admin/genres/<%= g._id %>?_method=DELETE"
+                        method="post"
+                        onsubmit="return confirm('Delete this genre?');">
+                    <button class="btn btn-sm btn-danger">
+                      <i class="fas fa-trash"></i> Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+
+            <% if (genres.length === 0) { %>
+              <tr>
+                <td colspan="2" class="text-center text-muted">
+                  No genres found.
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/admin_wrapper_end') %>

@@ -1,0 +1,96 @@
+<%- include('../../partials/admin_wrapper_start') %>
+
+<div class="container-fluid px-4">
+  <h1 class="mt-4">Comments Management</h1>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Manage Comments</li>
+  </ol>
+
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span><i class="fas fa-comments me-2"></i>Comments List</span>
+      <span class="badge bg-secondary"><%= comments.length %> items</span>
+    </div>
+
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-dark">
+            <tr class="text-center">
+              <th style="width: 30%">Comment</th>
+              <th>Game</th>
+              <th>User</th>
+              <th>Rating</th>
+              <th>Created</th>
+              <th style="width: 120px">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% comments.forEach(c => { %>
+              <tr>
+                <!-- Comment -->
+                <td class="text-truncate" style="max-width: 300px;">
+                  <%= c.content %>
+                </td>
+
+                <!-- Game -->
+                <td>
+                  <a href="/games/<%= c.game._id %>" class="fw-semibold text-decoration-none">
+                    <%= c.game.name %>
+                  </a>
+                </td>
+
+                <!-- User -->
+                <td>
+                  <span class="badge bg-info text-dark">
+                    <%= c.user.username %>
+                  </span>
+                </td>
+
+                <!-- Rating -->
+                <td class="text-center">
+                  <% if (typeof c.rating !== 'undefined') { %>
+                    <span class="badge bg-warning text-dark">
+                      ⭐ <%= c.rating %>
+                    </span>
+                  <% } else { %>
+                    <span class="text-muted">N/A</span>
+                  <% } %>
+                </td>
+
+                <!-- Created -->
+                <td class="text-center">
+                  <small class="text-muted">
+                    <%= c.createdAt.toLocaleString() %>
+                  </small>
+                </td>
+
+                <!-- Actions -->
+                <td class="text-center">
+                  <form action="/admin/comments/<%= c._id %>?_method=DELETE"
+                        method="post"
+                        onsubmit="return confirm('Delete this comment?');">
+                    <button class="btn btn-sm btn-danger">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+
+            <% if (comments.length === 0) { %>
+              <tr>
+                <td colspan="6" class="text-center text-muted">
+                  No comments found.
+                </td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../../partials/admin_wrapper_end') %>

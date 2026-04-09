@@ -1,0 +1,35 @@
+<div class="admin-nav">
+    <% const active=(path)=> (typeof currentPath !== 'undefined' && currentPath.startsWith(path)) ? 'active' : '' %>
+        <div class="admin-profile mb-3">
+            <% if (currentUser) { %>
+                <div class="avatar">
+                    <%= (currentUser.username || 'A' ).charAt(0).toUpperCase() %>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name">
+                        <%= currentUser.username %>
+                    </div>
+                    <div class="profile-role">
+                        <%= currentUser.role %>
+                    </div>
+                </div>
+                <% } else { %>
+                    <div class="avatar">A</div>
+                    <div class="profile-info">
+                        <div class="profile-name">Admin</div>
+                    </div>
+                    <% } %>
+        </div>
+
+        <ul class="nav flex-column">
+            <li class="nav-item"><a
+                    class="nav-link <%= ((typeof currentPath !== 'undefined' && currentPath === '/admin') ? 'active' : active('/admin')) %>"
+                    href="/admin">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link <%= active('/admin/games') %>" href="/admin/games">Games</a></li>
+            <li class="nav-item"><a class="nav-link <%= active('/admin/genres') %>" href="/admin/genres">Genres</a></li>
+            <li class="nav-item"><a class="nav-link <%= active('/admin/comments') %>"
+                    href="/admin/comments">Comments</a></li>
+            <li class="nav-item"><a class="nav-link <%= active('/admin/users') %>" href="/admin/users">User</a></li>
+
+        </ul>
+</div>

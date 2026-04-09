@@ -1,0 +1,123 @@
+<%- include('../partials/admin_wrapper_start') %>
+
+<div class="container-fluid px-4">
+  <h1 class="mt-4">Games Management</h1>
+  <ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item active">Manage Games</li>
+  </ol>
+
+  <!-- ACTION + FILTER -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span><i class="fas fa-gamepad me-2"></i>Games List</span>
+      <a href="/admin/games/new" class="btn btn-primary btn-sm">
+        <i class="fas fa-plus"></i> Add Game
+      </a>
+    </div>
+
+    <div class="card-body">
+      <form class="row g-2 mb-3">
+        <div class="col-md-6">
+          <input name="q" class="form-control" placeholder="Search by name...">
+        </div>
+
+        <div class="col-md-3">
+          <select name="genre" class="form-select">
+            <option value="">All genres</option>
+            <% if (typeof genres !== 'undefined') { %>
+              <% genres.forEach(g => { %>
+                <option value="<%= g._id %>"><%= g.name %></option>
+              <% }) %>
+            <% } %>
+          </select>
+        </div>
+
+        <div class="col-md-3 d-grid">
+          <button class="btn btn-outline-secondary">
+            <i class="fas fa-filter"></i> Filter
+          </button>
+        </div>
+      </form>
+
+      <!-- TABLE -->
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-dark">
+            <tr class="text-center">
+              <th>Name</th>
+              <th>Genres</th>
+              <th>Rating</th>
+              <th style="width: 160px">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <% games.forEach(g => { %>
+              <tr>
+
+                <!-- Name -->
+                <td class="fw-semibold">
+                  <%= g.name %>
+                </td>
+
+                <!-- Genres -->
+                <td>
+                  <% if (g.genres && g.genres.length) { %>
+                    <% g.genres.forEach(x => { %>
+                      <span class="badge bg-info text-dark me-1">
+                        <%= x.name ? x.name : x %>
+                      </span>
+                    <% }) %>
+                  <% } else { %>
+                    <span class="text-muted">N/A</span>
+                  <% } %>
+                </td>
+
+                <!-- Rating -->
+                <td class="text-center">
+                  <% if (typeof g.rating !== 'undefined') { %>
+                    <span class="badge 
+                      <%= g.rating > 8 ? 'bg-success' : (g.rating >= 5 ? 'bg-warning text-dark' : 'bg-danger') %>">
+                      ⭐ <%= g.rating %>
+                    </span>
+                  <% } else { %>
+                    <span class="text-muted">N/A</span>
+                  <% } %>
+                </td>
+
+                <!-- Actions -->
+                <td class="text-center">
+                  <a href="/admin/games/<%= g._id %>/edit"
+                     class="btn btn-sm btn-primary">
+                    <i class="fas fa-edit"></i>
+                  </a>
+
+                  <form action="/admin/games/<%= g._id %>?_method=DELETE"
+                        method="post"
+                        style="display:inline"
+                        onsubmit="return confirm('Delete this game?');">
+                    <button class="btn btn-sm btn-danger">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </form>
+                </td>
+
+              </tr>
+            <% }) %>
+
+            <% if (games.length === 0) { %>
+              <tr>
+                <td colspan="4" class="text-center text-muted">
+                  No games found.
+                </td>
+              </tr>
+            <% } %>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/admin_wrapper_end') %>
